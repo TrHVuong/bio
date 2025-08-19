@@ -50,7 +50,7 @@ def sb_upload(local_path: str, remote_path: str) -> str:
 
 # ---------------- App config ----------------
 CONFIDENCE_THRESHOLD = 0.7
-BASE_URL="https://bioscanbe-production.up.railway.app"
+BASE_URL="https://bioscan.up.railway.app"
 
 @app.route("/predict", methods=["POST"])
 def predict():
