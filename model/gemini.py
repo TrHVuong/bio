@@ -1,11 +1,9 @@
 import google.generativeai as genai
 import PIL.Image
-# Cấu hình API key của bạn
 import os
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Khởi tạo model Gemini
 gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
 def generate_description (label, image_path):
