@@ -11,18 +11,16 @@ import requests
 MODEL_PATH = "model/best_model.keras"
 MODEL_URL = os.getenv("MODEL_URL")
 
-# Tự động tải nếu model chưa tồn tại
 if not os.path.exists(MODEL_PATH):
-    print(f"⬇️ Downloading model from {MODEL_URL}")
+    print(f"Downloading model from {MODEL_URL}")
     os.makedirs("model", exist_ok=True)
     response = requests.get(MODEL_URL)
     with open(MODEL_PATH, "wb") as f:
         f.write(response.content)
-    print("✅ Model downloaded.")
+    print("Model downloaded.")
 else:
-    print("✅ Model already exists.")
+    print("Model already exists.")
 
-# Sau đó load model như bình thường
 from tensorflow.keras.models import load_model
 model = load_model(MODEL_PATH, compile=False)
 
@@ -35,22 +33,68 @@ CLASS_NAMES = [
     'potato', 'rabbit', 'rice_plant', 'seal', 'snake', 'spider', 'tiger',
     'tomato', 'turtle', 'zebra'
 ]
+CLASS_NAMES_VI = {
+    'ape': 'Khỉ',
+    'beans': 'Đậu',
+    'bee': 'Ong',
+    'bird': 'Chim',
+    'buffalo': 'Trâu',
+    'butterfly': 'Bướm',
+    'cabbage': 'Bắp cải',
+    'cat': 'Mèo',
+    'cauliflower': 'Súp lơ',
+    'chicken': 'Gà',
+    'chipmunk': 'Sóc chuột',
+    'coffee': 'Cà phê',
+    'cow': 'Bò',
+    'cucumber': 'Dưa chuột',
+    'deer': 'Hươu',
+    'dog': 'Chó',
+    'dragon_fruits': 'Thanh long',
+    'elephant': 'Voi',
+    'fish': 'Cá',
+    'fox': 'Cáo',
+    'ginger': 'Gừng',
+    'goat': 'Dê',
+    'horse': 'Ngựa',
+    'jackfruit': 'Mít',
+    'jelly_fish': 'Sứa',
+    'lion': 'Sư tử',
+    'litchi': 'Vải',
+    'longan': 'Nhãn',
+    'lotus': 'Hoa sen',
+    'maize': 'Ngô',
+    'mouse': 'Chuột',
+    'orchid': 'Hoa lan',
+    'panther': 'Báo đen',
+    'papaya': 'Đu đủ',
+    'peacock': 'Công',
+    'pig': 'Lợn',
+    'potato': 'Khoai tây',
+    'rabbit': 'Thỏ',
+    'rice_plant': 'Cây lúa',
+    'seal': 'Hải cẩu',
+    'snake': 'Rắn',
+    'spider': 'Nhện',
+    'tiger': 'Hổ',
+    'tomato': 'Cà chua',
+    'turtle': 'Rùa',
+    'zebra': 'Ngựa vằn'
+}
+
 
 def recognize_image(img_path):
-    """
-    Nhận diện ảnh và trả về tên lớp cùng với điểm tin cậy.
-    """
     img = image.load_img(img_path, target_size=(224, 224))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
     
-    # Thực hiện dự đoán
     preds = model.predict(x)
     
-    # Lấy chỉ số và điểm tin cậy của lớp có xác suất cao nhất
     class_idx = np.argmax(preds[0])
     confidence = np.max(preds[0])
+    class_en = CLASS_NAMES[class_idx]
+    class_vi = CLASS_NAMES_VI[class_en]
+
     
-    # Trả về cả tên lớp và điểm tin cậy
-    return CLASS_NAMES[class_idx], float(confidence)
+    return class_vi, float(confidence)
